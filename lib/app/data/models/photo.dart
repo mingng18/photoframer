@@ -1,6 +1,6 @@
 import 'package:exif/exif.dart';
 import 'package:isar/isar.dart';
-import 'package:photoframer/app/widgets/utils.dart';
+import 'package:photoframer/app/utils/maths.dart';
 
 part 'photo.g.dart';
 
@@ -16,7 +16,7 @@ class Photo {
   String? imageDateTime;
   String? exifExposureTime;
   String? exifFNumber;
-  int? exifISOSpeedRatings;
+  String? exifISOSpeedRatings;
   String? focalLength;
   String? lensModel;
   GPSData? location;
@@ -37,40 +37,9 @@ class Photo {
     this.lensModel = "",
     this.location,
   });
-  // Uint8List imageFile;
-  // int imageWidth;
-  // int imageLength;
-  // double aspectRatio;
-  // String imageMake;
-  // String imageModel;
-  // String imageSoftware;
-  // String imageDateTime;
-  // String exifExposureTime;
-  // String exifFNumber;
-  // int exifISOSpeedRatings;
-  // String focalLength;
-  // String lensModel;
-  // Location? location;
-
-  // Photo({
-  //   required this.imageFile,
-  //   required this.imageWidth,
-  //   required this.imageLength,
-  //   required this.aspectRatio,
-  //   required this.imageMake,
-  //   required this.imageModel,
-  //   this.imageSoftware = "",
-  //   required this.imageDateTime,
-  //   required this.exifExposureTime,
-  //   required this.exifFNumber,
-  //   required this.exifISOSpeedRatings,
-  //   required this.focalLength,
-  //   this.lensModel = "",
-  //   this.location,
-  // });
 
   factory Photo.fromIfdTag(String imageFilePath, Map<String, IfdTag> data,
-      int width, int length, GPSData location) {
+      int width, int length, GPSData? location) {
     return Photo(
         imageFilePath: imageFilePath,
         imageWidth: width,
@@ -82,10 +51,11 @@ class Photo {
         imageSoftware: data["Image Software"].toString(),
         imageDateTime: data["EXIF DateTimeOriginal"].toString(),
         exifExposureTime: data["EXIF ExposureTime"].toString(),
-        exifFNumber: Utils.evalExpression(data["EXIF FNumber"].toString()),
-        exifISOSpeedRatings: int.parse(data["EXIF ISOSpeedRatings"].toString()),
-        focalLength:
-            Utils.evalExpression(data["EXIF FocalLengthIn35mmFilm"].toString()),
+        exifFNumber:
+            SimpleMaths.evalExpression(data["EXIF FNumber"].toString()),
+        exifISOSpeedRatings: data["EXIF ISOSpeedRatings"].toString(),
+        focalLength: SimpleMaths.evalExpression(
+            data["EXIF FocalLengthIn35mmFilm"].toString()),
         lensModel: data["EXIF LensModel"].toString(),
         location: location);
   }

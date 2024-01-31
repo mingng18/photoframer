@@ -6,6 +6,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/landing/bindings/landing_binding.dart';
 import '../modules/landing/views/landing_view.dart';
+import '../modules/no_crop_post/bindings/no_crop_post_binding.dart';
+import '../modules/no_crop_post/views/no_crop_post_view.dart';
 import '../modules/preview_image/bindings/preview_image_binding.dart';
 import '../modules/preview_image/views/preview_image_view.dart';
 import '../modules/projects/bindings/projects_binding.dart';
@@ -50,6 +52,11 @@ class AppPages {
       name: _Paths.SETTINGS,
       page: () => const SettingsView(),
       binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.NO_CROP_POST,
+      page: () => const NoCropPostView(),
+      binding: NoCropPostBinding(),
     ),
   ];
 }

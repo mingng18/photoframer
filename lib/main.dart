@@ -6,8 +6,9 @@ import 'package:photoframer/app/global.dart';
 import 'package:photoframer/app/modules/preview_image/controllers/preview_image_controller.dart';
 import 'package:photoframer/app/modules/projects/controllers/animated_dialog_controller.dart';
 import 'package:photoframer/app/modules/projects/controllers/projects_controller.dart';
-import 'package:photoframer/app/projects_controller.dart';
-import 'package:photoframer/app/theme.dart';
+import 'package:photoframer/app/modules/settings/controllers/settings_controller.dart';
+import 'package:photoframer/app/utils/projects_controller.dart';
+import 'package:photoframer/app/utils/theme.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -20,6 +21,9 @@ void main() {
   );
   Get.lazyPut<ProjectsController>(
     () => ProjectsController(),
+  );
+  Get.lazyPut<SettingsController>(
+    () => SettingsController(),
   );
   Get.put<AnimatedDialogController>(AnimatedDialogController(),
       permanent: true);

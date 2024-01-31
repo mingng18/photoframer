@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:photoframer/app/isar_service.dart';
+import 'package:photoframer/app/utils/isar_service.dart';
 
 class GlobalService extends GetxService {
   static GlobalService get to => Get.find();
   late IsarService db;
 
-  final RxBool _isDarkMode = false.obs;
+  final RxBool _isDarkMode = true.obs;
   bool get isDarkMode => _isDarkMode.value;
 
   void switchThemeModel() {

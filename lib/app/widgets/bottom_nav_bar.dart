@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:photoframer/app/destinations.dart';
+import 'package:photoframer/app/utils/destinations.dart';
 
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({

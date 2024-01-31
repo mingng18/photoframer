@@ -1,4 +1,4 @@
-class Utils {
+class SimpleMaths {
   static String evalExpression(String expression) {
     List<String> parts = expression.split('/');
     if (parts.length != 2) {

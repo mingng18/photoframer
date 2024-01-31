@@ -9,6 +9,7 @@ abstract class Routes {
   static const LANDING = _Paths.LANDING;
   static const CREATE = _Paths.CREATE;
   static const SETTINGS = _Paths.SETTINGS;
+  static const NO_CROP_POST = _Paths.NO_CROP_POST;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const LANDING = '/landing';
   static const CREATE = '/create';
   static const SETTINGS = '/settings';
+  static const NO_CROP_POST = '/no-crop-post';
 }

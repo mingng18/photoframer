@@ -1,0 +1,11 @@
+Main features
+- Add noncrop story
+- Home Page
+- Settings
+- Add info page in details view
+- Add delete in project view
+- Add tag
+
+Bug
+- The FAB button cnt close automatically when click outside the region
+- 

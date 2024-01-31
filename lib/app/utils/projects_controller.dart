@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:photoframer/app/data/models/project.dart';
 import 'package:photoframer/app/global.dart';
-import 'package:photoframer/app/isar_service.dart';
+import 'package:photoframer/app/utils/isar_service.dart';
 
 class ProjectListController extends GetxController {
   RxList<Project> projects = <Project>[].obs;

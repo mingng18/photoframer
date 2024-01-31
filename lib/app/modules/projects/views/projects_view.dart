@@ -9,7 +9,7 @@ import 'package:photoframer/app/data/models/colors_combination.dart';
 import 'package:photoframer/app/data/models/project.dart';
 import 'package:photoframer/app/extensions.dart';
 import 'package:photoframer/app/modules/projects/views/animated_dialog.dart';
-import 'package:photoframer/app/projects_controller.dart';
+import 'package:photoframer/app/utils/projects_controller.dart';
 import 'package:photoframer/app/widgets/image_information.dart';
 
 import '../controllers/projects_controller.dart';
@@ -50,7 +50,9 @@ class ProjectsView extends GetView<ProjectsController> {
                           const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2),
                       itemBuilder: (context, index) => projectCard(
-                          projectListController.projects[index], context, index));
+                          projectListController.projects[index],
+                          context,
+                          index));
             }),
           ],
         ),
@@ -163,12 +165,25 @@ class ProjectsView extends GetView<ProjectsController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.favorite),
+                        GestureDetector(
+                          onTapUp: (details) {
+                            print("yayyy");
+                            // controller.previewImageController.toggleFavourite();
+                          },
+                          onTapDown: (details) => print("down"),
+                          onLongPressUp: () => print("long press up"),
+                          onLongPressDown: (details) => print("long press down"),
+                          onLongPressEnd: (details) => print("long press end"),
+                          onLongPress: () => print("long press"),
+                          child: IconButton(
+                            onPressed: () {},
+                            tooltip: "Favourite",
+                            icon: const Icon(Icons.favorite),
+                          ),
                         ),
                         IconButton(
                           onPressed: () {},
+                          tooltip: "delete",
                           icon: const Icon(Icons.delete),
                         ),
                       ],

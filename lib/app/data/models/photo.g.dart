@@ -31,7 +31,7 @@ const PhotoSchema = Schema(
     r'exifISOSpeedRatings': PropertySchema(
       id: 3,
       name: r'exifISOSpeedRatings',
-      type: IsarType.long,
+      type: IsarType.string,
     ),
     r'focalLength': PropertySchema(
       id: 4,
@@ -110,6 +110,12 @@ int _photoEstimateSize(
     }
   }
   {
+    final value = object.exifISOSpeedRatings;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
     final value = object.focalLength;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
@@ -170,7 +176,7 @@ void _photoSerialize(
   writer.writeDouble(offsets[0], object.aspectRatio);
   writer.writeString(offsets[1], object.exifExposureTime);
   writer.writeString(offsets[2], object.exifFNumber);
-  writer.writeLong(offsets[3], object.exifISOSpeedRatings);
+  writer.writeString(offsets[3], object.exifISOSpeedRatings);
   writer.writeString(offsets[4], object.focalLength);
   writer.writeString(offsets[5], object.imageDateTime);
   writer.writeString(offsets[6], object.imageFilePath);
@@ -198,7 +204,7 @@ Photo _photoDeserialize(
     aspectRatio: reader.readDoubleOrNull(offsets[0]),
     exifExposureTime: reader.readStringOrNull(offsets[1]),
     exifFNumber: reader.readStringOrNull(offsets[2]),
-    exifISOSpeedRatings: reader.readLongOrNull(offsets[3]),
+    exifISOSpeedRatings: reader.readStringOrNull(offsets[3]),
     focalLength: reader.readStringOrNull(offsets[4]),
     imageDateTime: reader.readStringOrNull(offsets[5]),
     imageFilePath: reader.readStringOrNull(offsets[6]),
@@ -231,7 +237,7 @@ P _photoDeserializeProp<P>(
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readStringOrNull(offset)) as P;
     case 5:
@@ -653,47 +659,55 @@ extension PhotoQueryFilter on QueryBuilder<Photo, Photo, QFilterCondition> {
   }
 
   QueryBuilder<Photo, Photo, QAfterFilterCondition> exifISOSpeedRatingsEqualTo(
-      int? value) {
+    String? value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'exifISOSpeedRatings',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Photo, Photo, QAfterFilterCondition>
       exifISOSpeedRatingsGreaterThan(
-    int? value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'exifISOSpeedRatings',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Photo, Photo, QAfterFilterCondition> exifISOSpeedRatingsLessThan(
-    int? value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'exifISOSpeedRatings',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<Photo, Photo, QAfterFilterCondition> exifISOSpeedRatingsBetween(
-    int? lower,
-    int? upper, {
+    String? lower,
+    String? upper, {
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
@@ -702,6 +716,78 @@ extension PhotoQueryFilter on QueryBuilder<Photo, Photo, QFilterCondition> {
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Photo, Photo, QAfterFilterCondition>
+      exifISOSpeedRatingsStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'exifISOSpeedRatings',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Photo, Photo, QAfterFilterCondition> exifISOSpeedRatingsEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'exifISOSpeedRatings',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Photo, Photo, QAfterFilterCondition> exifISOSpeedRatingsContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'exifISOSpeedRatings',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Photo, Photo, QAfterFilterCondition> exifISOSpeedRatingsMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'exifISOSpeedRatings',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Photo, Photo, QAfterFilterCondition>
+      exifISOSpeedRatingsIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'exifISOSpeedRatings',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Photo, Photo, QAfterFilterCondition>
+      exifISOSpeedRatingsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'exifISOSpeedRatings',
+        value: '',
       ));
     });
   }

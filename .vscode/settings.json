@@ -1,4 +1,5 @@
 {
     "cmake.configureOnOpen": true,
-    "java.configuration.updateBuildConfiguration": "disabled"
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "cmake.sourceDirectory": "C:/Users/Ming/Desktop/photoframer/linux"
 }

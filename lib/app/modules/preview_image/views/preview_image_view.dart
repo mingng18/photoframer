@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:photoframer/app/data/models/project.dart';
 import 'package:photoframer/app/extensions.dart';
 import 'package:photoframer/app/modules/preview_image/controllers/preview_image_controller.dart';
@@ -31,35 +30,42 @@ class PreviewImageView extends GetView<PreviewImageController> {
             decoration: InputDecoration(
               hintText: "Project Title",
               hintStyle: context.titleMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.shadow.withOpacity(0.5)),
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.5)),
               border: InputBorder.none,
             ),
           ),
           actions: [
-            // TextButton(
-            //   onPressed: () {
-            //     controller.colorController.forward();
-            //     controller.update(['image']);
-            //     print("${controller.colorAnimation.value}");
-            //     print("Forwarding");
-            //   },
-            //   child: Icon(
-            //     Icons.nightlight_round,
-            //     color: Theme.of(context).colorScheme.onSurface,
-            //   ),
-            // ),
-            // TextButton(
-            //   onPressed: () {
-            //     controller.colorController.reverse();
-            //     controller.update(['image']);
-            //     print("${controller.colorAnimation.value}");
-            //     print("reverse");
-            //   },
-            //   child: Icon(
-            //     Icons.nightlight_round,
-            //     color: Theme.of(context).colorScheme.onSurface,
-            //   ),
-            // ),
+            MenuAnchor(
+              builder: (context, menuController, child) {
+                return IconButton(
+                  onPressed: () {
+                    if (menuController.isOpen) {
+                      menuController.close();
+                    } else {
+                      menuController.open();
+                    }
+                  },
+                  icon: const Icon(Icons.more_vert),
+                );
+              },
+              menuChildren: controller.menuList.asMap().entries.map((entry) {
+                final int index = entry.key;
+                final MenuIconLabel menuItem = entry.value;
+
+                return AnimatedOpacity(
+                  duration: Duration(milliseconds: 200 + index * 200),
+                  curve: const Cubic(0.05, 0.7, 0.1, 1.0),
+                  opacity: 1,
+                  child: MenuItemButton(
+                    leadingIcon: Icon(menuItem.icon),
+                    onPressed: menuItem.onPressed,
+                    child: Text(menuItem.label, style: context.bodyMedium),
+                  ),
+                );
+              }).toList(),
+            ),
+            const SizedBox(width: 8),
           ],
         ),
         body: TabBarView(
@@ -75,58 +81,7 @@ class PreviewImageView extends GetView<PreviewImageController> {
           child: const Icon(Icons.share),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endContained,
-        bottomNavigationBar: BottomAppBar(
-          padding: const EdgeInsets.all(0),
-          child: BottomAppBar(
-            elevation: 2,
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                  tooltip: 'Edit',
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: ((context) =>
-                          buildProjectTitleContentInfo(context))),
-                ),
-                // LikeButton(
-                //   padding: EdgeInsets.all(7),
-                //     size: 26,
-                //     likeBuilder: (bool isLiked) {
-                //       return Icon(
-                //         Icons.favorite,
-                //         color: isLiked
-                //             ? Theme.of(context).colorScheme.primary
-                //             : Theme.of(context).colorScheme.onSurfaceVariant,
-                //         size: 26,
-                //       );
-                //     },
-                //     isLiked: controller.isLiked.value,
-                //     onTap: controller.onLikeButtonTapped),
-                Obx(() => IconButton(
-                      tooltip: 'Favorite',
-                      icon: Icon(Icons.favorite,
-                          color: controller.isLiked.value
-                              ? Theme.of(context).colorScheme.error
-                              : Theme.of(context).colorScheme.onSurface),
-                      onPressed: () => controller.toggleFavourite(),
-                    )),
-                IconButton(
-                  tooltip: 'Colors',
-                  icon: const Icon(Icons.color_lens),
-                  onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: ((context) => buildColorPalette(context))),
-                ),
-                IconButton(
-                  tooltip: 'Label Image',
-                  icon: const Icon(Icons.label),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        ),
+        bottomNavigationBar: buildBottomAppBar(context),
       );
     });
   }
@@ -425,6 +380,62 @@ class PreviewImageView extends GetView<PreviewImageController> {
                   ),
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildBottomAppBar(BuildContext context) {
+    return BottomAppBar(
+      padding: const EdgeInsets.all(0),
+      child: BottomAppBar(
+        elevation: 2,
+        child: Row(
+          children: <Widget>[
+            IconButton(
+              tooltip: 'Edit',
+              icon: const Icon(Icons.edit),
+              onPressed: () => showModalBottomSheet(
+                  context: context,
+                  builder: ((context) =>
+                      buildProjectTitleContentInfo(context))),
+            ),
+
+            // LikeButton(
+            //   padding: EdgeInsets.all(7),
+            //     size: 26,
+            //     likeBuilder: (bool isLiked) {
+            //       return Icon(
+            //         Icons.favorite,
+            //         color: isLiked
+            //             ? Theme.of(context).colorScheme.primary
+            //             : Theme.of(context).colorScheme.onSurfaceVariant,
+            //         size: 26,
+            //       );
+            //     },
+            //     isLiked: controller.isLiked.value,
+            //     onTap: controller.onLikeButtonTapped),
+            Obx(() => IconButton(
+                  tooltip: 'Favorite',
+                  icon: Icon(Icons.favorite,
+                      color: controller.isLiked.value
+                          ? Theme.of(context).colorScheme.error
+                          : Theme.of(context).colorScheme.onSurface),
+                  onPressed: () => controller.toggleFavourite(),
+                )),
+            IconButton(
+              tooltip: 'Colors',
+              icon: const Icon(Icons.color_lens),
+              onPressed: () => showModalBottomSheet(
+                  context: context,
+                  builder: ((context) => buildColorPalette(context))),
+            ),
+            IconButton(
+              tooltip: 'Label Image',
+              icon: const Icon(Icons.label),
+              onPressed: () {},
             ),
           ],
         ),
