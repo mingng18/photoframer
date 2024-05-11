@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/calendar/bindings/calendar_binding.dart';
+import '../modules/calendar/views/calendar_view.dart';
 import '../modules/create/bindings/create_binding.dart';
 import '../modules/create/views/create_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -55,8 +57,13 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.NO_CROP_POST,
-      page: () => const NoCropPostView(),
+      page: () => NoCropPostView(),
       binding: NoCropPostBinding(),
+    ),
+    GetPage(
+      name: _Paths.CALENDAR,
+      page: () => const CalendarView(),
+      binding: CalendarBinding(),
     ),
   ];
 }

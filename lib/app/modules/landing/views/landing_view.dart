@@ -74,6 +74,18 @@ class LandingView extends GetView<LandingController> {
             "Your Projects",
             style: context.titleMedium,
           ),
+          Text(
+            "Your Projects",
+            style: context.titleMedium,
+          ),
+          // Center(
+          //   child: RiveAnimation.network(
+          //     'https://cdn.rive.app/animations/vehicles.riv',
+          //   ),
+          // ),
+          // const Center(
+          //     child: RiveAnimation.asset('lib/app/data/asset/rive/new_file.riv',
+          //         fit: BoxFit.cover, useArtboardSize: true, )),
         ],
       ),
     ));

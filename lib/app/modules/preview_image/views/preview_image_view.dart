@@ -59,7 +59,9 @@ class PreviewImageView extends GetView<PreviewImageController> {
                   opacity: 1,
                   child: MenuItemButton(
                     leadingIcon: Icon(menuItem.icon),
-                    onPressed: menuItem.onPressed,
+                    onPressed: () {
+                      menuItem.onPressed(context);
+                    },
                     child: Text(menuItem.label, style: context.bodyMedium),
                   ),
                 );
@@ -110,6 +112,8 @@ class PreviewImageView extends GetView<PreviewImageController> {
 
   Widget template1(Project project, GlobalKey key) {
     double aspectRatio = project.photo.aspectRatio ?? 2 / 3;
+    // final GlobalKey _firstBackgroundImageKey = GlobalKey();
+
     return RepaintBoundary(
       key: key,
       child: Container(
@@ -157,9 +161,23 @@ class PreviewImageView extends GetView<PreviewImageController> {
                           borderRadius: BorderRadius.circular(16),
                           child: Hero(
                             tag: 'picture${project.id}',
+                            // child: Flow(
+                            //     delegate: ParallaxFlowDelegate(
+                            //       scrollable: Scrollable.of(context),
+                            //       listItemContext: context,
+                            //       backgroundImageKey: _firstBackgroundImageKey,
+                            //     ),
+                            //     children: [
+                            //       Image.file(
+                            //         File(project.photo.imageFilePath!),
+                            //         fit: BoxFit.cover,
+                            //         key: _firstBackgroundImageKey,
+                            //       ),
+                            //     ]),
                             child: Image.file(
-                                File(project.photo.imageFilePath!),
-                                fit: BoxFit.cover),
+                              File(project.photo.imageFilePath!),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       );
@@ -435,7 +453,11 @@ class PreviewImageView extends GetView<PreviewImageController> {
             IconButton(
               tooltip: 'Label Image',
               icon: const Icon(Icons.label),
-              onPressed: () {},
+              onPressed: () {
+                Get.snackbar('User 123', 'Successfully created',
+                    icon: const Icon(Icons.check),
+                    );
+              },
             ),
           ],
         ),

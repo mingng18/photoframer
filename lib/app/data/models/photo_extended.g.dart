@@ -18,13 +18,8 @@ const PhotoExtendedSchema = Schema(
       name: r'filledPercentage',
       type: IsarType.double,
     ),
-    r'id': PropertySchema(
-      id: 1,
-      name: r'id',
-      type: IsarType.long,
-    ),
     r'photo': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'photo',
       type: IsarType.object,
       target: r'Photo',
@@ -59,9 +54,8 @@ void _photoExtendedSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDouble(offsets[0], object.filledPercentage);
-  writer.writeLong(offsets[1], object.id);
   writer.writeObject<Photo>(
-    offsets[2],
+    offsets[1],
     allOffsets,
     PhotoSchema.serialize,
     object.photo,
@@ -77,12 +71,11 @@ PhotoExtended _photoExtendedDeserialize(
   final object = PhotoExtended(
     filledPercentage: reader.readDoubleOrNull(offsets[0]),
     photo: reader.readObjectOrNull<Photo>(
-      offsets[2],
+      offsets[1],
       PhotoSchema.deserialize,
       allOffsets,
     ),
   );
-  object.id = reader.readLongOrNull(offsets[1]);
   return object;
 }
 
@@ -96,8 +89,6 @@ P _photoExtendedDeserializeProp<P>(
     case 0:
       return (reader.readDoubleOrNull(offset)) as P;
     case 1:
-      return (reader.readLongOrNull(offset)) as P;
-    case 2:
       return (reader.readObjectOrNull<Photo>(
         offset,
         PhotoSchema.deserialize,
@@ -190,77 +181,6 @@ extension PhotoExtendedQueryFilter
         upper: upper,
         includeUpper: includeUpper,
         epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<PhotoExtended, PhotoExtended, QAfterFilterCondition> idIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'id',
-      ));
-    });
-  }
-
-  QueryBuilder<PhotoExtended, PhotoExtended, QAfterFilterCondition>
-      idIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'id',
-      ));
-    });
-  }
-
-  QueryBuilder<PhotoExtended, PhotoExtended, QAfterFilterCondition> idEqualTo(
-      int? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PhotoExtended, PhotoExtended, QAfterFilterCondition>
-      idGreaterThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PhotoExtended, PhotoExtended, QAfterFilterCondition> idLessThan(
-    int? value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<PhotoExtended, PhotoExtended, QAfterFilterCondition> idBetween(
-    int? lower,
-    int? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
       ));
     });
   }

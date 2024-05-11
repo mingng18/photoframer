@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:photoframer/app/global.dart';
+import 'package:photoframer/app/modules/calendar/controllers/calendar_controller.dart';
+import 'package:photoframer/app/modules/no_crop_post/controllers/no_crop_post_controller.dart';
 import 'package:photoframer/app/modules/preview_image/controllers/preview_image_controller.dart';
 import 'package:photoframer/app/modules/projects/controllers/animated_dialog_controller.dart';
 import 'package:photoframer/app/modules/projects/controllers/projects_controller.dart';
 import 'package:photoframer/app/modules/settings/controllers/settings_controller.dart';
+import 'package:photoframer/app/utils/posts_controller.dart';
 import 'package:photoframer/app/utils/projects_controller.dart';
 import 'package:photoframer/app/utils/theme.dart';
 
@@ -16,6 +19,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put<GlobalService>(GlobalService());
   Get.put<ProjectListController>(ProjectListController());
+  Get.put<PostsListController>(PostsListController());
   Get.lazyPut<PreviewImageController>(
     () => PreviewImageController(),
   );
@@ -24,6 +28,12 @@ void main() {
   );
   Get.lazyPut<SettingsController>(
     () => SettingsController(),
+  );
+  Get.lazyPut<NoCropPostController>(
+    () => NoCropPostController(),
+  );
+  Get.lazyPut<CalendarController>(
+    () => CalendarController(),
   );
   Get.put<AnimatedDialogController>(AnimatedDialogController(),
       permanent: true);

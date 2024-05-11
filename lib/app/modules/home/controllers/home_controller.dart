@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:photoframer/app/modules/no_crop_post/controllers/no_crop_post_controller.dart';
 import 'package:photoframer/app/modules/preview_image/controllers/preview_image_controller.dart';
+import 'package:photoframer/app/utils/constant.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -10,6 +12,8 @@ class HomeController extends GetxController
   late final Animation<double> expandAnimation;
   final PreviewImageController previewImageController =
       Get.find<PreviewImageController>();
+  final NoCropPostController noCropPostController =
+      Get.find<NoCropPostController>();
 
   RxBool isFABOpened = false.obs;
 
@@ -47,9 +51,9 @@ class HomeController extends GetxController
 
     actionButtons = [
       ActionButton(
-          title: "Create New", icon: Icons.add, onPressed: () => toggleFAB()),
+          title: "Close", icon: Icons.add, onPressed: () => toggleFAB()),
       ActionButton(
-          title: "Photo",
+          title: "Story",
           icon: Icons.photo,
           onPressed: () {
             // Get.back();
@@ -57,7 +61,12 @@ class HomeController extends GetxController
             isFABOpened.value = false;
           }),
       ActionButton(
-          title: "Story", icon: Icons.square_rounded, onPressed: () {}),
+          title: "No Crop Post",
+          icon: Icons.square_rounded,
+          onPressed: () {
+            noCropPostController.pickImageFromGallery();
+            isFABOpened.value = false;
+          }),
       // ActionButton(title: "Video", icon: Icons.video_call, onPressed: () {}),
     ];
   }

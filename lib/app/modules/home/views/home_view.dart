@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:photoframer/app/extensions.dart';
+import 'package:photoframer/app/modules/calendar/views/calendar_view.dart';
 import 'package:photoframer/app/modules/home/controllers/home_controller.dart';
 import 'package:photoframer/app/modules/landing/views/landing_view.dart';
 import 'package:photoframer/app/modules/projects/controllers/projects_controller.dart';
@@ -58,6 +59,7 @@ class HomeView extends GetView<HomeController> {
                   LandingView(),
                   // CreateView(),
                   ProjectsView(),
+                  CalendarView(),
                   SettingsView(),
                 ],
               )),

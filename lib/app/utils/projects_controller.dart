@@ -19,10 +19,10 @@ class ProjectListController extends GetxController {
     projects.refresh();
   }
 
-  void deleteProject(String id) {
-    _db.deleteProject(int.parse(id));
+  void deleteProject(int id) {
+    _db.deleteProject(id);
     for (Project project in projects) {
-      if (project.id == int.parse(id)) {
+      if (project.id == id) {
         projects.remove(project);
       }
     }

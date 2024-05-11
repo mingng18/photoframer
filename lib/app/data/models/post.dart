@@ -10,12 +10,15 @@ class Post {
   DateTime createdDate;
   DateTime updatedDate;
   double postAspectRatio;
+  List<String>? tags;
+
   List<PhotoExtended> photos;
 
   Post({
     required this.createdDate,
     required this.updatedDate,
     this.postAspectRatio = 1,
+    this.tags,
     required this.photos,
   });
 
@@ -24,6 +27,7 @@ class Post {
       'createdDate': createdDate.toUtc().toIso8601String(),
       'updatedDate': updatedDate.toUtc().toIso8601String(),
       'postAspectRatio': postAspectRatio,
+      'tags': tags,
       'photos': photos.map((photo) => photo.toMap()).toList(),
     };
   }
@@ -33,6 +37,7 @@ class Post {
       createdDate: DateTime.parse(map['createdDate']),
       updatedDate: DateTime.parse(map['updatedDate']),
       postAspectRatio: map['postAspectRatio'],
+      tags: map['tags'],
       photos: (map['photos'] as List<dynamic>)
           .map<PhotoExtended>((e) => PhotoExtended.fromMap(e))
           .toList(),

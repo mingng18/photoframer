@@ -66,4 +66,5 @@ class ColorUtils {
             text: Theme.of(Get.context!).colorScheme.onBackground);
     }
   }
+  
 }

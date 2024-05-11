@@ -53,5 +53,6 @@ flutter:
           weight: 700
   assets:
     - lib/app/data/asset/images/
+    - lib/app/data/asset/rive/
 
 

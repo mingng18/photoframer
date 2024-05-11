@@ -12,9 +12,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photoframer/app/data/models/colors_combination.dart';
 import 'package:photoframer/app/data/models/photo.dart';
+import 'package:photoframer/app/data/models/post.dart';
 import 'package:photoframer/app/data/models/project.dart';
 import 'dart:ui' as ui;
 import 'package:intl/intl.dart';
+import 'package:photoframer/app/extensions.dart';
+import 'package:photoframer/app/utils/constant.dart';
+import 'package:photoframer/app/utils/posts_controller.dart';
 import 'package:photoframer/app/utils/projects_controller.dart';
 import 'package:photoframer/app/routes/app_pages.dart';
 import 'package:photoframer/app/utils/color_utils.dart';
@@ -26,7 +30,6 @@ class PreviewImageController extends GetxController
     with GetTickerProviderStateMixin {
   Project? project;
   RxString errorText = "".obs;
-  RxBool isLiked = false.obs;
 
   // final phyToLogRatio = Get.mediaQuery.devicePixelRatio;
   late ColorScheme currentColorSchemeLight;
@@ -36,6 +39,7 @@ class PreviewImageController extends GetxController
   late TextEditingController titleController;
   late TextEditingController contentController;
   late TabController tabController;
+  RxBool isLiked = false.obs;
 
   late AnimationController colorController;
   late Animation<double> colorAnimation;
@@ -56,13 +60,13 @@ class PreviewImageController extends GetxController
       var decodedImage = await decodeImageFromList(imageFile.readAsBytesSync());
 
       GPSData? gpsData = await CoordinatesConverter.getGPSData(data);
+
       project = Project(
         photo: Photo.fromIfdTag(pickedFile.path, data, decodedImage.width,
             decodedImage.height, gpsData),
         createdDate: DateTime.now(),
         updatedDate: DateTime.now(),
       );
-
       ProjectListController.to.addProject(project!);
       getToProjects(project!);
     }
@@ -72,8 +76,49 @@ class PreviewImageController extends GetxController
     ImageUtils.shareImage(key);
   }
 
-  void downloadImage(GlobalKey key) async {
-    ImageUtils.downloadImage(key);
+  void downloadImage(
+    GlobalKey key,
+  ) async {
+    if (await ImageUtils.downloadImage(key)) {
+      print("Successful");
+      Get.back();
+      Get.snackbar(
+        '',
+        '',
+        titleText: Text(
+          'Successfully downloaded',
+          style: Get.context!.titleMedium,
+        ),
+        forwardAnimationCurve: const Cubic(0.05, 0.7, 0.1, 1.0),
+        reverseAnimationCurve: const Cubic(0.3, 0.0, 0.8, 0.15),
+        animationDuration: const Duration(milliseconds: 400),
+        backgroundColor: Theme.of(Get.context!).colorScheme.primaryContainer,
+        colorText: Theme.of(Get.context!).colorScheme.onPrimaryContainer,
+        snackStyle: SnackStyle.FLOATING,
+        icon: const Icon(Icons.check),
+      );
+    } else {
+      print("Failed");
+      Get.snackbar(
+        '',
+        '',
+        titleText: Text(
+          'Failed downloading',
+          style: Get.context!.titleMedium,
+        ),
+        messageText: Text(
+          'Please try again later',
+          style: Get.context!.bodyMedium,
+        ),
+        forwardAnimationCurve: const Cubic(0.05, 0.7, 0.1, 1.0),
+        reverseAnimationCurve: const Cubic(0.3, 0.0, 0.8, 0.15),
+        animationDuration: const Duration(milliseconds: 400),
+        backgroundColor: Theme.of(Get.context!).colorScheme.primaryContainer,
+        colorText: Theme.of(Get.context!).colorScheme.onPrimaryContainer,
+        snackStyle: SnackStyle.FLOATING,
+        icon: const Icon(Icons.check),
+      );
+    }
   }
 
   void updateProjectContent() {
@@ -165,6 +210,24 @@ class PreviewImageController extends GetxController
     Get.back();
   }
 
+  void successfulDeleteSnack() {
+    Get.snackbar(
+      '',
+      '',
+      titleText: Text(
+        'Successfully deleted',
+        style: Get.context!.titleMedium,
+      ),
+      forwardAnimationCurve: const Cubic(0.05, 0.7, 0.1, 1.0),
+      reverseAnimationCurve: const Cubic(0.3, 0.0, 0.8, 0.15),
+      animationDuration: const Duration(milliseconds: 400),
+      backgroundColor: Theme.of(Get.context!).colorScheme.primaryContainer,
+      colorText: Theme.of(Get.context!).colorScheme.onPrimaryContainer,
+      snackStyle: SnackStyle.FLOATING,
+      icon: const Icon(Icons.check),
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -200,22 +263,53 @@ class PreviewImageController extends GetxController
       MenuIconLabel(
           label: "Info",
           icon: Icons.info,
-          onPressed: () {
+          onPressed: (BuildContext context) {
             //TODO implement Info
             print("Info");
           }),
       MenuIconLabel(
           label: "Download",
           icon: Icons.download,
-          onPressed: () {
+          onPressed: (BuildContext context) {
+            print("Download");
             downloadImage(getKey());
           }),
       MenuIconLabel(
           label: "Delete",
           icon: Icons.delete,
-          onPressed: () {
-            //TODO implement delete
+          onPressed: (BuildContext context) {
             print("Delete");
+            showDialog(
+                context: Get.context!,
+                builder: (_) => AlertDialog(
+                      title: Text(
+                        "Are you sure want to delete?",
+                        style: context.titleMedium,
+                      ),
+                      actions: [
+                        FilledButton(
+                          onPressed: () {
+                            Get.back();
+                            Get.back();
+                            successfulDeleteSnack();
+                            ProjectListController.to.deleteProject(project!.id);
+                          },
+                          child: Text(
+                            "Yes",
+                            style: context.bodyMedium,
+                          ),
+                        ),
+                        FilledButton.tonal(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Text(
+                            "No",
+                            style: context.bodyMedium,
+                          ),
+                        )
+                      ],
+                    ));
           }),
     ];
   }
@@ -233,7 +327,7 @@ class PreviewImageController extends GetxController
 class MenuIconLabel {
   String label;
   IconData icon;
-  Function() onPressed;
+  Function(BuildContext) onPressed;
 
   MenuIconLabel(
       {required this.label, required this.icon, required this.onPressed});

@@ -26,6 +26,12 @@ const List<Destination> destinations = <Destination>[
     tooltip: "A collection of projects",
   ),
   Destination(
+    label: 'Calendar',
+    icon: Icon(Icons.calendar_month),
+    outlineIcon: Icon(Icons.calendar_month_outlined),
+    tooltip: "My calendars",
+  ),
+  Destination(
     label: 'Settings',
     icon: Icon(Icons.settings), 
     outlineIcon: Icon(Icons.settings_outlined),
